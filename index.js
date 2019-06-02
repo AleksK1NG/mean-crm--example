@@ -1,11 +1,22 @@
-const express = require('express');
+const cluster = require('cluster');
+const os = require('os');
+const pid = process.pid;
 
-const app = express();
+if (cluster.isMaster) {
+  const cpusCount = os.cpus().length;
+  console.log('CPUs length is => ', cpusCount);
+  console.log(`Master started. Pid: ${pid}`);
+  for (let i = 0; i < cpusCount - 1; i++) {
+    const worker = cluster.fork();
+    worker.on('exit', (worker, code) => {
+      // console.log(`Worker died! Pid: ${worker.process.pid}`);
+      console.log(`Worker died! Pid: ${worker}`);
+      cluster.fork();
+    });
+  }
+}
 
-// Body Parser
-app.use(express.json());
-
-// PORT
-const port = process.env.PORT || 5000;
-
-app.listen(port, () => console.log(`Server listen on port: ${port} `));
+if (cluster.isWorker) {
+  require('./app');
+}
+// autocannon -c 200 -d 10 http://localhost:5000
