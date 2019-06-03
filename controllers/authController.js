@@ -1,9 +1,24 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const User = require('../models/User');
 
 module.exports.login = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    res.json({ message: 'Success =D' });
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'No user with given email' });
+
+    const passwordResult = await bcrypt.compare(password, user.password);
+    if (!passwordResult) res.status(401).json({ message: 'Wrong password' });
+
+    const token = jwt.sign({
+      email: user.email,
+      id: user._id
+    }, config.get('JWT_SECRET'),
+      { expiresIn: '1h' });
+
+    res.json({ user, token });
   } catch (error) {
     console.error(error.message);
     res.status(500).send({ message: error.message });
@@ -23,7 +38,7 @@ module.exports.register = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json(user.toJSON());
+    res.status(201).json(user);
   } catch (error) {
     console.error(error.message);
     res.status(500).send({ message: error.message });
