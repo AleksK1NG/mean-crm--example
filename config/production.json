@@ -1,0 +1,6 @@
+{
+  "name": "MEAN Development",
+  "appPassword": "APP_PASSWORD",
+  "mongoURI": "mongodb://Alex:Alexpro777@ds217976.mlab.com:17976/mean-crm",
+  "JWT_SECRET": "my-superuserjwt-secreeet"
+}
