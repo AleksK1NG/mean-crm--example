@@ -12,7 +12,7 @@ module.exports = (passport) => {
   passport.use(
     new JwtStrategy(options, async (payload, done) => {
       try {
-        // payload.id from decoded jwt.sign({email,id})
+        // payload.id from decoded jwt.sign({ email, id })
         const user = await User.findById(payload.id);
         console.log('PASSPORT MIDDLEWARE USER => ', user);
         if (!user) return done(null, false);
