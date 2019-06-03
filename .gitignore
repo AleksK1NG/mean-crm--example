@@ -3,3 +3,5 @@
 /node_modules
 /client/node_modules
 /.idea/
+/config/development.json
+/config/production.json

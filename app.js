@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const connect = require('./db');
 
+connect();
 const app = express();
 
 // Import routes
