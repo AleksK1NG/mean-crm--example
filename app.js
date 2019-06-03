@@ -18,6 +18,9 @@ app.use(passport.initialize());
 require('./middlewares/passport')(passport);
 
 app.use(morgan('dev'));
+
+// File uploads
+app.use('/uploads', express.static('uploads'));
 // Body Parser
 app.use(express.json());
 

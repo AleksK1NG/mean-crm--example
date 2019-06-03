@@ -38,16 +38,37 @@ module.exports.deleteCategory = async (req, res) => {
   }
 };
 
-module.exports.updateCategory = async (req, res) => {
+module.exports.createCategory = async (req, res) => {
+  const user = req.user;
+  const { name, imageUrl } = req.body;
   try {
-    res.json({ message: 'Success =D' });
+    const category = new Category({
+      user: user._id,
+      name,
+      imageUrl: req.file ? req.file.path : ''
+    });
+
+    await category.save();
+
+    res.status(201).json(category);
   } catch (error) {
     errorHandler(res, error);
   }
 };
 
-module.exports.createCategory = async (req, res) => {
+module.exports.updateCategory = async (req, res) => {
+  const { id } = req.params;
+  const user = req.user;
+  const { name, imageUrl } = req.body;
+  const updated = { name };
+
+  if (req.file) {
+    updated.imageUrl = req.file.path;
+  }
+
   try {
+    const category = await Category.findOneAndUpdate({ _id: id }, { $set: updated }, { new: true });
+
     res.json({ message: 'Success =D' });
   } catch (error) {
     errorHandler(res, error);
