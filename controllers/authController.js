@@ -12,11 +12,14 @@ module.exports.login = async (req, res) => {
     const passwordResult = await bcrypt.compare(password, user.password);
     if (!passwordResult) res.status(401).json({ message: 'Wrong password' });
 
-    const token = jwt.sign({
-      email: user.email,
-      id: user._id
-    }, config.get('JWT_SECRET'),
-      { expiresIn: '1h' });
+    const token = jwt.sign(
+      {
+        email: user.email,
+        id: user._id
+      },
+      config.get('JWT_SECRET'),
+      { expiresIn: '1h' }
+    );
 
     res.json({ user, token });
   } catch (error) {
@@ -43,4 +46,14 @@ module.exports.register = async (req, res) => {
     console.error(error.message);
     res.status(500).send({ message: error.message });
   }
+};
+
+module.exports.loadCurrentUser = (req, res) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.sendStatus(422).json({ message: 'Not auth user' });
+  }
+
+  res.status(200).json(user);
 };

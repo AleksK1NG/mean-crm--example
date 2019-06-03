@@ -1,4 +1,5 @@
 module.exports.getAllCategories = async (req, res) => {
+  console.log('Category GET ALL USER => ', req.user);
   try {
     res.json({ message: 'Success =D' });
   } catch (error) {
