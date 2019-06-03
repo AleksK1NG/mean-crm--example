@@ -1,28 +1,40 @@
+const Category = require('../models/Category');
+const Position = require('../models/Position');
+const errorHandler = require('../utils/errorsHandler');
+
 module.exports.getAllCategories = async (req, res) => {
-  console.log('Category GET ALL USER => ', req.user);
+  const user = req.user;
+
   try {
-    res.json({ message: 'Success =D' });
+    const categories = await Category.find({ user: user._id });
+
+    res.json(categories);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server Error');
+    errorHandler(res, error);
   }
 };
 
 module.exports.getCategoryById = async (req, res) => {
+  const { id } = req.params;
   try {
-    res.json({ message: 'Success =D' });
+    const category = await Category.findById(id);
+
+    res.json(category);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server Error');
+    errorHandler(res, error);
   }
 };
 
 module.exports.deleteCategory = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    res.json({ message: 'Success =D' });
+    await Category.remove({ _id: id });
+    await Position.remove({ category: id });
+
+    res.json({ message: 'Category deleted' });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server Error');
+    errorHandler(res, error);
   }
 };
 
@@ -30,8 +42,7 @@ module.exports.updateCategory = async (req, res) => {
   try {
     res.json({ message: 'Success =D' });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server Error');
+    errorHandler(res, error);
   }
 };
 
@@ -39,7 +50,6 @@ module.exports.createCategory = async (req, res) => {
   try {
     res.json({ message: 'Success =D' });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Server Error');
+    errorHandler(res, error);
   }
 };
