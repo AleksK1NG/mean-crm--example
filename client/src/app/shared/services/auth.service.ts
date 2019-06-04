@@ -19,12 +19,18 @@ export class AuthService {
         localStorage.setItem('auth-token', token);
         this.setToken(token);
         this.setUser(user);
-        debugger
       })
     );
   }
 
-  register() {}
+  register(user: User): Observable<User> {
+    return this.httpClient.post<User>('/api/v1/auth/register', user).pipe(
+      tap((user) => {
+        this.setUser(user);
+        debugger;
+      })
+    );
+  }
 
   setToken(token) {
     this.token = token;
