@@ -3,12 +3,13 @@ import { User } from '../interfaces/user';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
   private token: string = null;
   private user: Object = null;
@@ -52,6 +53,7 @@ export class AuthService {
     this.setToken(null);
     this.setUser(null);
     localStorage.clear();
+    this.router.navigate(['/login'])
   }
 
   setUser(user) {
