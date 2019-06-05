@@ -36,7 +36,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     };
     this.loginSub = this.authService.login(user).subscribe(
       (data) => {
-        this.router.navigate(['/overview']);
+        this.router.navigate(['/']);
         console.log('Success', data);
       },
       (error) => {
