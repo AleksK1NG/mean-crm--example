@@ -11,9 +11,24 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './shared/classes/token.interceptor';
 import { OverviewPageComponent } from './overview-page/overview-page.component';
+import { AnalyticsPageComponent } from './analytics-page/analytics-page.component';
+import { HistoryPageComponent } from './history-page/history-page.component';
+import { OrderPageComponent } from './order-page/order-page.component';
+import { CategoriesPageComponent } from './categories-page/categories-page.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginPageComponent, AuthLayoutComponent, SiteLayoutComponent, RegisterPageComponent, OverviewPageComponent],
+  declarations: [
+    AppComponent,
+    LoginPageComponent,
+    AuthLayoutComponent,
+    SiteLayoutComponent,
+    RegisterPageComponent,
+    OverviewPageComponent,
+    AnalyticsPageComponent,
+    HistoryPageComponent,
+    OrderPageComponent,
+    CategoriesPageComponent
+  ],
   imports: [BrowserModule, AppRoutingModule, ReactiveFormsModule, FormsModule, HttpClientModule],
   providers: [{ provide: HTTP_INTERCEPTORS, multi: true, useClass: TokenInterceptor }],
   bootstrap: [AppComponent]
