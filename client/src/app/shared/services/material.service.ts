@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 
 declare var M;
 
@@ -10,5 +10,9 @@ export class MaterialService {
 
   static toast(message: string) {
     M.toast({ html: message, classes: 'rounded' });
+  }
+
+  static initFloatingButton(ref: ElementRef) {
+    M.FloatingActionButton.init(ref.nativeElement)
   }
 }
