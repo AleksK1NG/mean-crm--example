@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../shared/services/auth.service';
 import { User } from '../shared/interfaces/user';
 import { Router } from '@angular/router';
+import { MaterialService } from '../shared/services/material.service';
 
 @Component({
   selector: 'app-register-page',
@@ -38,11 +39,13 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
             registered: true
           }
         });
+        MaterialService.toast('Success =D');
         debugger;
       },
       (error) => {
         console.warn(error);
         this.form.enable();
+        MaterialService.toast(error.error.message);
       }
     );
   }
