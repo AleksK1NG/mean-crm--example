@@ -1,15 +1,18 @@
 <div class="page-title">
-  <h4 >Categories {{ categoriesSub?.length }}</h4>
+  <h4>Categories {{ categoriesSub?.length }}</h4>
   <button routerLink="/categories/new" class="waves-effect waves-light btn grey darken-1">Create Category</button>
 </div>
 
-<app-loader *ngIf="isLoading"></app-loader>
-
-
-<div class="row">
+<div class="row" *ngIf="!isLoading">
   <div class="col s12">
-    <div class="collection">
-      <a href="#!" class="collection-item">Category 1</a>
+    <div class="collection" *ngIf="categoriesSub.length !== 0; else empty">
+      <a [routerLink]="['/categories', category._id]" *ngFor="let category of categoriesSub" class="collection-item">{{
+        category.name
+      }}</a>
     </div>
+    <ng-template #empty>
+      <div class="center">No categories for this user.</div>
+    </ng-template>
   </div>
 </div>
+<app-loader *ngIf="isLoading"></app-loader>
