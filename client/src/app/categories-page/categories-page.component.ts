@@ -11,24 +11,29 @@ import { Subscription } from 'rxjs';
 export class CategoriesPageComponent implements OnInit, OnDestroy {
   constructor(private categoriesService: CategoriesService) {}
 
-  private categories: Category[] = this.categoriesService.getCategories();
+  // private categories: Category[] = this.categoriesService.getCategories();
   private isLoadingSub: Subscription;
   private isLoading = true;
+  private categoriesSub: Category[];
 
   ngOnInit() {
     this.isLoadingSub = this.categoriesService.isLoading$.subscribe((loading) => {
       this.isLoading = loading;
     });
 
-    this.categoriesService.fetchAllCategories().subscribe(
-      (categories: Category[]) => {
-        this.categoriesService.setCategories(categories);
-        console.log('GET categories => ', categories);
-      },
-      (error) => {
-        this.categoriesService.setError(error);
-      }
-    );
+    this.categoriesService.getAllCategories().subscribe((categories: Category[]) => {
+      this.categoriesSub = categories;
+    });
+
+    // this.categoriesService.fetchAllCategories().subscribe(
+    //   (categories: Category[]) => {
+    //     this.categoriesService.setCategories(categories);
+    //     console.log('GET categories => ', categories);
+    //   },
+    //   (error) => {
+    //     this.categoriesService.setError(error);
+    //   }
+    // );
   }
 
   ngOnDestroy(): void {
