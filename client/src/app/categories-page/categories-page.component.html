@@ -6,9 +6,9 @@
 <div class="row" *ngIf="!isLoading">
   <div class="col s12">
     <div class="collection" *ngIf="categoriesSub.length !== 0; else empty">
-      <a [routerLink]="['/categories', category._id]" *ngFor="let category of categoriesSub" class="collection-item">{{
-        category.name
-      }}</a>
+      <a [routerLink]="['/categories', category._id]" *ngFor="let category of categoriesSub" class="collection-item">
+        {{ category.name }}
+      </a>
     </div>
     <ng-template #empty>
       <div class="center">No categories for this user.</div>
