@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Category } from '../interfaces/category';
+import { IPosition } from '../interfaces/position';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PositionsService {
   private errorSub$ = new BehaviorSubject<any>(null);
-  private positions: Position[] = [];
-  private positionsList$ = new BehaviorSubject<Position[]>(this.positions);
+  private positions: IPosition[] = [];
+  private positionsList$ = new BehaviorSubject<IPosition[]>(this.positions);
   public isLoading$ = new BehaviorSubject<boolean>(false);
 
   constructor(private httpClient: HttpClient) {}
 
-  getPositionsByCategoryId(categoryId: string): BehaviorSubject<Position[]> {
+  getPositionsByCategoryId(categoryId: string): BehaviorSubject<IPosition[]> {
     this.isLoading$.next(true);
-    this.httpClient.get<Position[]>(`/api/v1/position/${categoryId}`).subscribe(
-      (positions: Position[]) => {
+    this.httpClient.get<IPosition[]>(`/api/v1/position/${categoryId}`).subscribe(
+      (positions: IPosition[]) => {
         this.positionsList$.next(positions);
         console.log('GET Positions service => ', positions);
         this.isLoading$.next(false);
@@ -32,3 +32,4 @@ export class PositionsService {
     return this.positionsList$;
   }
 }
+

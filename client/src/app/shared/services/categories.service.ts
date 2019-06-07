@@ -147,4 +147,4 @@ export class CategoriesService {
     return this.categoriesList$;
   }
 }
-// 9
+
