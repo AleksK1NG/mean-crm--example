@@ -60,14 +60,27 @@ export class CategoriesFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.categoriesService.addCategory(this.form.value).subscribe(
-      (categories: Category[]) => {
-        console.log('Categories after Add Category call => ', categories);
-      },
-      (error) => {
-        MaterialService.toast(error.error.message);
-      }
-    );
+    if (this.isNew) {
+      this.categoriesService.addCategory(this.form.value).subscribe(
+        (categories: Category[]) => {
+          console.log('Categories after Add Category call => ', categories);
+        },
+        (error) => {
+          MaterialService.toast(error.error.message);
+        }
+      );
+    }
+
+    if (!this.isNew && this.id) {
+      const newCategory: Category = {
+        name: this.form.value.name,
+        _id: this.id,
+        imageUrl: this.imagePreview
+      };
+      this.categoriesService.updateCategory(newCategory).subscribe((res) => {
+        console.log('Update category subscribe => ', res);
+      });
+    }
   }
 
   deleteCategory() {

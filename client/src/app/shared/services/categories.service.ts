@@ -58,6 +58,33 @@ export class CategoriesService {
     return this.currentCategorySub$;
   }
 
+  // addCategory(name: string, image?: File): BehaviorSubject<Category[]> {
+  //   this.isLoading$.next(true);
+  //   const fd = new FormData()
+  //   if (image) {
+  //     fd.append('image', image, image.name)
+  //   }
+  //   fd.append('name', name)
+  //   debugger
+  //   this.httpClient.post<Category>('/api/v1/category', fd).subscribe(
+  //     (category: Category) => {
+  //       this.categories.push(category);
+  //       this.categoriesList$.next(this.categories);
+  //       this.errorSub$.next(null);
+  //       this.isLoading$.next(false);
+  //       this.router.navigate(['/categories'])
+  //     },
+  //     (error) => {
+  //       this.errorSub$.next(error);
+  //       this.isLoading$.next(false);
+  //     }
+  //   );
+  //
+  //   // return this.categoriesSub$;
+  //   return this.categoriesList$;
+  // }
+
+
   addCategory(newCategory: Category): BehaviorSubject<Category[]> {
     this.isLoading$.next(true);
     this.httpClient.post<Category>('/api/v1/category', newCategory).subscribe(
