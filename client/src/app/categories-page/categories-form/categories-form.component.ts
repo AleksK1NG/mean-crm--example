@@ -24,24 +24,14 @@ export class CategoriesFormComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(null, Validators.required)
     });
-    // this.route.params.subscribe((params: Params) => {
-    //   if (params['id']) {
-    //     this.isNew = false;
-    //     this.id = params['id'];
-    //     console.log(params.id);
-    //     console.log('id => ', this.id);
-    //
-    //     this.categoriesService.getCategory(this.id).subscribe((category: Category) => {
-    //       console.log('Category form => ', category);
-    //     })
-    //   }
-    // });
 
     this.route.params
       .pipe(
         switchMap((params: Params) => {
+          this.form.disable()
           if (params['id']) {
             this.isNew = false;
+            this.id = params['id'];
             return this.categoriesService.getCategory(params['id']);
           }
           return of(null);
@@ -52,25 +42,27 @@ export class CategoriesFormComponent implements OnInit {
           if (category) {
             this.form.patchValue({
               name: category.name
-            })
+            });
+            MaterialService.updateInputs();
           }
           this.category = category;
+          this.form.enable()
         },
         (error) => {
           MaterialService.toast(error.error.message);
+          this.form.enable()
         }
       );
   }
 
   onSubmit() {
     console.log('Add Category => ', this.form.value);
-
     this.categoriesService.addCategory(this.form.value).subscribe(
       (categories: Category[]) => {
         console.log('Categories after Add Category call => ', categories);
       },
       (error) => {
-        console.error('Categories ERROR after Add Category call => ', error);
+        MaterialService.toast(error.error.message);
       }
     );
   }
@@ -83,7 +75,8 @@ export class CategoriesFormComponent implements OnInit {
           console.log('Categories after Add Category call => ', categories);
         },
         (error) => {
-          console.error('Categories ERROR after Add Category call => ', error);
+          console.error(error);
+          MaterialService.toast(error.error.message);
         }
       );
     }
