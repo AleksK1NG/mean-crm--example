@@ -35,7 +35,6 @@ export class PositionsService {
 
   addPosition(position: IPosition): BehaviorSubject<IPosition[]> {
     this.isLoading$.next(true);
-    debugger
     this.httpClient.post<IPosition>('/api/v1/position', position).subscribe(
       (position: IPosition) => {
         this.positions.push(position);
@@ -43,7 +42,6 @@ export class PositionsService {
         this.errorSub$.next(null);
         this.isLoading$.next(false);
         // this.router.navigate(['/categories']);
-        debugger
       },
       (error) => {
         this.errorSub$.next(error);
