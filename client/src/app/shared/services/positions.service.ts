@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IPosition } from '../interfaces/position';
+import { Category } from '../interfaces/category';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +32,26 @@ export class PositionsService {
 
     return this.positionsList$;
   }
-}
 
+  addPosition(position: IPosition): BehaviorSubject<IPosition[]> {
+    this.isLoading$.next(true);
+    debugger
+    this.httpClient.post<IPosition>('/api/v1/position', position).subscribe(
+      (position: IPosition) => {
+        this.positions.push(position);
+        this.positionsList$.next(this.positions);
+        this.errorSub$.next(null);
+        this.isLoading$.next(false);
+        // this.router.navigate(['/categories']);
+        debugger
+      },
+      (error) => {
+        this.errorSub$.next(error);
+        this.isLoading$.next(false);
+      }
+    );
+
+    // return this.categoriesSub$;
+    return this.positionsList$;
+  }
+}
