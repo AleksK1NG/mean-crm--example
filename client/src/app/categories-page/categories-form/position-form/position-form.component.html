@@ -2,37 +2,80 @@
   <div class="col s12">
     <div class="page-subtitle">
       <h4>Positions:</h4>
-      <button class="waves-effect waves-light btn grey darken-1 btn-small modal-trigger" data-target="create-modal">
+      <button
+        (click)="onAddPosition()"
+        class="waves-effect waves-light btn grey darken-1 btn-small modal-trigger"
+        data-target="create-modal"
+      >
         Add position
       </button>
     </div>
 
-    <div class="collection">
-      <a class="collection-item collection-item-icon">
-        <span> Cofe <strong>2$</strong> </span>
-        <span>
-          <i class="material-icons">delete</i>
+    <div *ngIf="!isLoading; else loader">
+      <div class="collection" *ngIf="positions.length !== 0; else empty">
+        <a
+          (click)="onSelectPosition(position)"
+          *ngFor="let position of positions"
+          class="collection-item collection-item-icon"
+        >
+          <span>
+            {{ position.name }} <strong>{{ position.cost }}</strong>
+          </span>
+          <span>
+            <i class="material-icons" (click)="onDeletePosition(position)">delete</i>
+          </span>
+        </a>
+      </div>
+
+      <ng-template #empty>
+        <div class="center">No potions for this category.</div>
+      </ng-template>
+    </div>
+    <ng-template #loader>
+      <app-loader></app-loader>
+    </ng-template>
+  </div>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div id="create-modal" class="modal" #modal>
+    <div class="modal-content">
+      <h4 class="mb1">Add position</h4>
+
+      <div class="input-field">
+        <input
+          [ngClass]="{ invalid: form.get('name').invalid && form.get('name').touched }"
+          formControlName="name"
+          id="pos-name"
+          type="text"
+        />
+        <label for="pos-name">Name</label>
+        <span *ngIf="form.get('name').invalid && form.get('name').touched" class="helper-text red-text">
+          <span *ngIf="form.get('name').errors['name']">Name is required</span>
         </span>
-      </a>
-    </div>
-  </div>
-</div>
+      </div>
 
-
-<div id="create-modal" class="modal">
-  <div class="modal-content">
-    <h4 class="mb1">Add position</h4>
-    <div class="input-field">
-      <input id="pos-name" type="text" required>
-      <label for="pos-name">Name</label>
+      <div class="input-field">
+        <input
+          [ngClass]="{ invalid: form.get('cost').invalid && form.get('cost').touched }"
+          formControlName="cost"
+          id="pos-cost"
+          type="number"
+          min="1"
+        />
+        <label for="pos-cost">Price</label>
+        <span *ngIf="form.get('cost').invalid && form.get('cost').touched" class="helper-text red-text">
+          <span *ngIf="form.get('cost').errors['cost']">Price is required</span>
+        </span>
+      </div>
     </div>
-    <div class="input-field">
-      <input id="pos-cost" type="text" required>
-      <label for="pos-cost">Price</label>
+    <div class="modal-footer">
+      <button (click)="onCancel($event)" class="modal-action waves-effect waves-black btn-flat">
+        Cancel
+      </button>
+      <button class="modal-action btn waves-effect" type="submit" [disabled]="form.invalid || form.disabled">
+        Save
+      </button>
     </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-action waves-effect waves-black btn-flat">Cancel</a>
-    <button class="modal-action btn waves-effect">Save</button>
-  </div>
-</div>
+</form>
