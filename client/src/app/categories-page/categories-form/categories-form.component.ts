@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CategoriesService } from '../../shared/services/categories.service';
 import { Category } from '../../shared/interfaces/category';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { MaterialService } from '../../shared/services/material.service';
 
@@ -61,14 +61,17 @@ export class CategoriesFormComponent implements OnInit {
 
   onSubmit() {
     if (this.isNew) {
-      this.categoriesService.addCategory(this.form.value).subscribe(
-        (categories: Category[]) => {
-          console.log('Categories after Add Category call => ', categories);
-        },
-        (error) => {
-          MaterialService.toast(error.error.message);
-        }
-      );
+      this.categoriesService
+        .addCategory(this.form.value)
+        .pipe(take(1))
+        .subscribe(
+          (categories: Category[]) => {
+            MaterialService.toast('Success');
+          },
+          (error) => {
+            MaterialService.toast(error.error.message);
+          }
+        );
     }
 
     if (!this.isNew && this.id) {
@@ -77,23 +80,35 @@ export class CategoriesFormComponent implements OnInit {
         _id: this.id,
         imageUrl: this.imagePreview
       };
-      this.categoriesService.updateCategory(newCategory).subscribe((res) => {
-        console.log('Update category subscribe => ', res);
-      });
+      this.categoriesService
+        .updateCategory(newCategory)
+        .pipe(take(1))
+        .subscribe(
+          (res) => {
+            MaterialService.toast('Success');
+          },
+          (error) => {
+            console.error(error);
+            MaterialService.toast(error.error.message);
+          }
+        );
     }
   }
 
   deleteCategory() {
     if (this.id) {
-      this.categoriesService.deleteCategory(this.id).subscribe(
-        (categories: Category[]) => {
-          console.log('Categories after Add Category call => ', categories);
-        },
-        (error) => {
-          console.error(error);
-          MaterialService.toast(error.error.message);
-        }
-      );
+      this.categoriesService
+        .deleteCategory(this.id)
+        .pipe(take(1))
+        .subscribe(
+          (categories: Category[]) => {
+            MaterialService.toast('Success');
+          },
+          (error) => {
+            console.error(error);
+            MaterialService.toast(error.error.message);
+          }
+        );
     }
   }
 
