@@ -17,7 +17,7 @@ export class CategoriesService {
   public isLoading$ = new BehaviorSubject<boolean>(false);
   private categoriesSub$ = new Subject<Category[]>();
   private categoriesList$ = new BehaviorSubject<Category[]>(this.categories);
-  private currentCategorySub$ = new BehaviorSubject<Category>(null);
+  private currentCategorySub$ = new BehaviorSubject<Category>(this.currentCategory);
 
 
   getAllCategories(): Subject<Category[]> {
@@ -126,3 +126,4 @@ export class CategoriesService {
 }
 
 
+// 6 11:07
