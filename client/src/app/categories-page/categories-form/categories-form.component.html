@@ -28,7 +28,13 @@
     </div>
 
     <div>
-      <button type="button" class="waves-effect waves-light btn orange lighten-2 mb2">
+      <input (change)="onFileUpload($event)" #input class="dn" type="file" />
+      <button
+        [disabled]="form.disabled"
+        (click)="triggerClick()"
+        type="button"
+        class="waves-effect waves-light btn orange lighten-2 mb2"
+      >
         <i class="material-icons left">backup</i>
         Upload image
       </button>
@@ -42,11 +48,7 @@
   </form>
 
   <div class="col s12 l4 center">
-    <img
-      class="responsive-img"
-      style="height: 200px"
-      src="https://images.unsplash.com/photo-1552326399-9109c86379ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1946&q=80"
-    />
+    <img class="responsive-img" style="height: 200px" [src]="imagePreview" *ngIf="imagePreview" />
   </div>
 </div>
 

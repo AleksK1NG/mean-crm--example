@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CategoriesService } from '../../shared/services/categories.service';
@@ -13,12 +13,15 @@ import { MaterialService } from '../../shared/services/material.service';
   styleUrls: ['./categories-form.component.css']
 })
 export class CategoriesFormComponent implements OnInit {
+  @ViewChild('input', null) uploadInputRef: ElementRef;
   constructor(private route: ActivatedRoute, private categoriesService: CategoriesService) {}
   private id: string;
   private isNew = true;
 
   private form: FormGroup;
   private category: Category = null;
+  private image: File;
+  private imagePreview = null;
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -28,7 +31,7 @@ export class CategoriesFormComponent implements OnInit {
     this.route.params
       .pipe(
         switchMap((params: Params) => {
-          this.form.disable()
+          this.form.disable();
           if (params['id']) {
             this.isNew = false;
             this.id = params['id'];
@@ -43,20 +46,20 @@ export class CategoriesFormComponent implements OnInit {
             this.form.patchValue({
               name: category.name
             });
+            this.imagePreview = category.imageUrl;
             MaterialService.updateInputs();
           }
           this.category = category;
-          this.form.enable()
+          this.form.enable();
         },
         (error) => {
           MaterialService.toast(error.error.message);
-          this.form.enable()
+          this.form.enable();
         }
       );
   }
 
   onSubmit() {
-    console.log('Add Category => ', this.form.value);
     this.categoriesService.addCategory(this.form.value).subscribe(
       (categories: Category[]) => {
         console.log('Categories after Add Category call => ', categories);
@@ -68,7 +71,6 @@ export class CategoriesFormComponent implements OnInit {
   }
 
   deleteCategory() {
-    console.log('Delete Category ID from state => ', this.id);
     if (this.id) {
       this.categoriesService.deleteCategory(this.id).subscribe(
         (categories: Category[]) => {
@@ -80,5 +82,22 @@ export class CategoriesFormComponent implements OnInit {
         }
       );
     }
+  }
+
+  triggerClick() {
+    this.uploadInputRef.nativeElement.click();
+  }
+
+  onFileUpload(event) {
+    const file = event.target.files[0];
+    this.image = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      console.log(typeof reader.result);
+      this.imagePreview = reader.result;
+    };
+
+    reader.readAsDataURL(file);
   }
 }
