@@ -27,18 +27,32 @@
       </span>
     </div>
 
-    <div>
-      <input (change)="onFileUpload($event)" #input class="dn" type="file" />
-      <button
-        [disabled]="form.disabled"
-        (click)="triggerClick()"
-        type="button"
-        class="waves-effect waves-light btn orange lighten-2 mb2"
-      >
-        <i class="material-icons left">backup</i>
-        Upload image
-      </button>
+    <div class="input-field">
+      <input
+        [ngClass]="{ invalid: form.get('imageUrl').invalid && form.get('imageUrl').touched }"
+        formControlName="imageUrl"
+        id="imageUrl"
+        type="text"
+      />
+
+      <label for="imageUrl">Image Url</label>
+      <span *ngIf="form.get('imageUrl').invalid && form.get('imageUrl').touched" class="helper-text red-text">
+        <span *ngIf="form.get('imageUrl').errors['required']">Image is required</span>
+      </span>
     </div>
+
+<!--    <div>-->
+<!--      <input (change)="onFileUpload($event)" #input class="dn" type="file" />-->
+<!--      <button-->
+<!--        [disabled]="form.disabled"-->
+<!--        (click)="triggerClick()"-->
+<!--        type="button"-->
+<!--        class="waves-effect waves-light btn orange lighten-2 mb2"-->
+<!--      >-->
+<!--        <i class="material-icons left">backup</i>-->
+<!--        Upload image-->
+<!--      </button>-->
+<!--    </div>-->
 
     <div>
       <button type="submit" [disabled]="form.invalid || form.disabled" class="waves-effect waves-light btn">

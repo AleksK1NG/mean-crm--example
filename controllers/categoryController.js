@@ -45,7 +45,7 @@ module.exports.createCategory = async (req, res) => {
     const category = new Category({
       user: user._id,
       name,
-      imageUrl: req.file ? req.file.path : ''
+      imageUrl
     });
 
     await category.save();
@@ -60,8 +60,7 @@ module.exports.updateCategory = async (req, res) => {
   const { id } = req.params;
   const user = req.user;
   const { name, imageUrl } = req.body;
-  const updated = { name };
-
+  const updated = { name, imageUrl };
   if (req.file) {
     updated.imageUrl = req.file.path;
   }

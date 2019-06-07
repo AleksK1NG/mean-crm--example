@@ -25,7 +25,8 @@ export class CategoriesFormComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      name: new FormControl(null, Validators.required)
+      name: new FormControl(null, Validators.required),
+      imageUrl: new FormControl(null)
     });
 
     this.route.params
@@ -43,8 +44,10 @@ export class CategoriesFormComponent implements OnInit {
       .subscribe(
         (category: Category) => {
           if (category) {
+            console.log('Category onInit => ', category);
             this.form.patchValue({
-              name: category.name
+              name: category.name,
+              imageUrl: category.imageUrl
             });
             this.imagePreview = category.imageUrl;
             MaterialService.updateInputs();
@@ -78,7 +81,7 @@ export class CategoriesFormComponent implements OnInit {
       const newCategory: Category = {
         name: this.form.value.name,
         _id: this.id,
-        imageUrl: this.imagePreview
+        imageUrl: this.form.value.imageUrl
       };
       this.categoriesService
         .updateCategory(newCategory)
