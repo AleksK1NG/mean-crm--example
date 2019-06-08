@@ -3,5 +3,6 @@ export interface IPosition {
   cost: number;
   user?: string;
   _id?: string;
-  category?: string
+  category?: string;
+  quantity?: number;
 }
