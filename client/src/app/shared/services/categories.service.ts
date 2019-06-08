@@ -22,12 +22,15 @@ export class CategoriesService {
   getAllCategories(): Subject<Category[]> {
     // const categoriesSub$ = new Subject<Category[]>();
     this.isLoading$.next(true);
+
     this.httpClient.get<Category[]>('/api/v1/category').subscribe(
       (categories: Category[]) => {
         this.categoriesList$.next(categories);
         this.categoriesSub$.next(categories);
         this.errorSub$.next(null);
         this.isLoading$.next(false);
+        console.log('fetch categories => ', categories)
+
       },
       (error) => {
         this.errorSub$.next(error);
