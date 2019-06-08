@@ -17,7 +17,7 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private route: ActivatedRoute, private positionsService: PositionsService) {}
   @Input('categoryId') categoryId: string;
   @ViewChild('modal', null) modalRef: ElementRef;
-  public positions: IPosition[] = [];
+  public positions: IPosition[] = null;
   public isLoading: boolean = false;
   public modal: MaterialInstance;
   private positionId = null;
@@ -26,6 +26,8 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
   private form: FormGroup;
 
   ngOnInit(): void {
+    this.isLoading = true;
+
     this.positionsSub$ = this.positionsService.positionsList$.subscribe((positions: IPosition[]) => {
       this.positions = positions;
     });
@@ -35,14 +37,14 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
       cost: new FormControl(null, [Validators.required, Validators.min(1)])
     });
 
-    this.isLoading = true;
-
-    // this.getAllPositions();
     if (this.categoryId) {
       this.positionsService.getPositionsByCategoryId(this.categoryId).subscribe(
         (positions: IPosition[]) => {
           this.positions = positions;
-          this.isLoading = false;
+
+          if (this.positions) {
+            this.isLoading = false;
+          }
         },
         (error) => {
           console.error(error);
@@ -143,7 +145,6 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDeletePosition(position: IPosition, event) {
-
     event.stopPropagation();
     this.isLoading = true;
 
@@ -201,5 +202,3 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 }
-
-

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { IPosition } from '../interfaces/position';
 import { Router } from '@angular/router';
@@ -11,11 +11,12 @@ export class PositionsService {
   private errorSub$ = new BehaviorSubject<any>(null);
   private positions: IPosition[] = [];
   public positionsList$ = new BehaviorSubject<IPosition[]>(this.positions);
+  public positionsListObs$ = this.positionsList$.asObservable();
   public isLoading$ = new BehaviorSubject<boolean>(false);
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
-  getPositionsByCategoryId(categoryId: string): BehaviorSubject<IPosition[]> {
+  getPositionsByCategoryId(categoryId: string): Observable<IPosition[]> {
     this.isLoading$.next(true);
     this.httpClient.get<IPosition[]>(`/api/v1/position/${categoryId}`).subscribe(
       (positions: IPosition[]) => {
@@ -30,10 +31,11 @@ export class PositionsService {
       }
     );
 
-    return this.positionsList$;
+    // return this.positionsList$;
+    return this.positionsListObs$
   }
 
-  addPosition(position: IPosition): BehaviorSubject<IPosition[]> {
+  addPosition(position: IPosition): Observable<IPosition[]> {
     this.isLoading$.next(true);
     this.httpClient.post<IPosition>('/api/v1/position', position).subscribe(
       (position: IPosition) => {
@@ -48,10 +50,10 @@ export class PositionsService {
       }
     );
 
-    return this.positionsList$;
+    return this.positionsListObs$
   }
 
-  updatePosition(position: IPosition): BehaviorSubject<IPosition[]> {
+  updatePosition(position: IPosition): Observable<IPosition[]> {
     this.isLoading$.next(true);
     this.httpClient.patch<IPosition>(`/api/v1/position/${position._id}`, position).subscribe(
       (updatedPosition: IPosition) => {
@@ -68,10 +70,10 @@ export class PositionsService {
       }
     );
 
-    return this.positionsList$;
+    return this.positionsListObs$
   }
 
-  deletePosition(position: IPosition): BehaviorSubject<IPosition[]> {
+  deletePosition(position: IPosition): Observable<IPosition[]> {
     this.isLoading$.next(true);
 
     this.httpClient.delete<IPosition>(`/api/v1/position/${position._id}`).subscribe(
@@ -89,6 +91,6 @@ export class PositionsService {
       }
     );
 
-    return this.positionsList$;
+    return this.positionsListObs$
   }
 }
