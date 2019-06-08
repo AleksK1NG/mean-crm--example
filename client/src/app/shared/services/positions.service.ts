@@ -99,4 +99,27 @@ export class PositionsService {
     // return this.categoriesSub$;
     return this.positionsList$;
   }
+
+  deletePosition(position: IPosition): BehaviorSubject<IPosition[]> {
+    this.isLoading$.next(true);
+
+    this.httpClient.delete<IPosition>(`/api/v1/position/${position._id}`).subscribe(
+      (deletedPosition: IPosition) => {
+        this.positions = this.positions.filter((pos) => pos._id !== position._id);
+
+        this.positionsList$.next(this.positions);
+
+        this.errorSub$.next(null);
+        this.isLoading$.next(false);
+        this.router.navigate([`/categories/${position.category}`]);
+      },
+      (error) => {
+        this.errorSub$.next(error);
+        this.isLoading$.next(false);
+      }
+    );
+
+    // return this.categoriesSub$;
+    return this.positionsList$;
+  }
 }

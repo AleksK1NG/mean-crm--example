@@ -91,35 +91,33 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
         cost: this.form.value.cost,
         category: this.categoryId
       };
-      this.positionsService
-        .addPosition(newPosition)
-        .subscribe(
-          (positions: IPosition[]) => {
-            // console.log('Create positions => ', this.positions);
-            this.positions = positions;
-            // console.log('Create positions after => ', this.positions);
-            MaterialService.toast('Success');
-            this.modal.close();
-            // // this.getAllPositions();
-            this.form.enable();
-            this.form.reset({ name: '', cost: 1 });
-            this.isLoading = false;
-          },
-          (error) => {
-            console.error(error);
-            MaterialService.toast(error.error.message);
-            this.modal.close();
-            this.form.enable();
-            this.form.reset({ name: '', cost: 1 });
-            this.isLoading = false;
-          },
-          () => {
-            this.modal.close();
-            this.form.enable();
-            this.form.reset({ name: '', cost: 1 });
-            this.isLoading = false;
-          }
-        );
+      this.positionsService.addPosition(newPosition).subscribe(
+        (positions: IPosition[]) => {
+          // console.log('Create positions => ', this.positions);
+          this.positions = positions;
+          // console.log('Create positions after => ', this.positions);
+          MaterialService.toast('Success');
+          this.modal.close();
+          // // this.getAllPositions();
+          this.form.enable();
+          this.form.reset({ name: '', cost: 1 });
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error(error);
+          MaterialService.toast(error.error.message);
+          this.modal.close();
+          this.form.enable();
+          this.form.reset({ name: '', cost: 1 });
+          this.isLoading = false;
+        },
+        () => {
+          this.modal.close();
+          this.form.enable();
+          this.form.reset({ name: '', cost: 1 });
+          this.isLoading = false;
+        }
+      );
     } else {
       const newPosition: IPosition = {
         name: this.form.value.name,
@@ -156,13 +154,34 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
             this.form.enable();
             this.form.reset({ name: '', cost: 1 });
             this.isLoading = false;
-
           }
         );
     }
   }
 
-  onDeletePosition(position: IPosition) {}
+  onDeletePosition(position: IPosition, event) {
+    event.stopPropagation();
+    this.isLoading = true;
+
+    if (this.categoryId) {
+      this.positionsService
+        .deletePosition(position)
+        .pipe(take(1))
+        .subscribe(
+          (positions: IPosition[]) => {
+            this.positions = positions;
+            MaterialService.toast('Success');
+          },
+          (error) => {
+            console.error(error);
+            MaterialService.toast(error.error.message);
+          },
+          () => {
+            this.isLoading = false;
+          }
+        );
+    }
+  }
 
   getAllPositions() {
     if (this.categoryId) {
@@ -181,3 +200,4 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 }
+// TODO: 10 10:23
