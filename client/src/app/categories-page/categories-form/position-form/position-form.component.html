@@ -22,7 +22,8 @@
             {{ position.name }} <strong>{{ position.cost }}</strong>
           </span>
           <span>
-            <i class="material-icons" (click)="onDeletePosition(position, $event)">delete</i>
+            <i class="material-icons mr1" (click)="onDeletePosition(position, $event)">delete</i>
+            <i class="material-icons" (click)="onEditPosition(position, $event)">edit</i>
           </span>
         </a>
       </div>

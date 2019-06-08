@@ -83,9 +83,9 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSubmit() {
     this.isLoading = true;
-    this.form.disable();
 
     if (!this.positionId) {
+      this.form.disable();
       const newPosition: IPosition = {
         name: this.form.value.name,
         cost: this.form.value.cost,
@@ -93,23 +93,16 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
       };
       this.positionsService.addPosition(newPosition).subscribe(
         (positions: IPosition[]) => {
-          // console.log('Create positions => ', this.positions);
           this.positions = positions;
-          // console.log('Create positions after => ', this.positions);
-          MaterialService.toast('Success');
+          MaterialService.toast('Success create =D');
           this.modal.close();
-          // // this.getAllPositions();
           this.form.enable();
-          this.form.reset({ name: '', cost: 1 });
-          this.isLoading = false;
         },
         (error) => {
           console.error(error);
           MaterialService.toast(error.error.message);
           this.modal.close();
           this.form.enable();
-          this.form.reset({ name: '', cost: 1 });
-          this.isLoading = false;
         },
         () => {
           this.modal.close();
@@ -119,6 +112,7 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       );
     } else {
+      this.form.enable();
       const newPosition: IPosition = {
         name: this.form.value.name,
         cost: this.form.value.cost,
@@ -131,23 +125,12 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
         .pipe(take(1))
         .subscribe(
           (positions: IPosition[]) => {
-            // this.getAllPositions();
-            console.log('Update positions => ', this.positions);
             this.positions = positions;
-            console.log('Update positions => ', this.positions);
             MaterialService.toast('Success');
-            this.modal.close();
-            this.form.enable();
-            this.form.reset({ name: '', cost: 1 });
-            this.isLoading = false;
           },
           (error) => {
             console.error(error);
             MaterialService.toast(error.error.message);
-            this.modal.close();
-            this.form.enable();
-            this.form.reset({ name: '', cost: 1 });
-            this.isLoading = false;
           },
           () => {
             this.modal.close();
@@ -160,6 +143,7 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDeletePosition(position: IPosition, event) {
+
     event.stopPropagation();
     this.isLoading = true;
 
@@ -183,21 +167,39 @@ export class PositionFormComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getAllPositions() {
-    if (this.categoryId) {
-      this.positionsService.getPositionsByCategoryId(this.categoryId).subscribe(
-        (positions: IPosition[]) => {
-          this.positions = positions;
-          this.isLoading = false;
-
-          console.log('Positions component state => ', this.positions);
-        },
-        (error) => {
-          console.error(error);
-          this.isLoading = false;
-        }
-      );
+  onEditPosition(position: IPosition, event) {
+    this.onSelectPosition(position);
+    console.log('edit', position);
+    event.stopPropagation();
+    this.form.enable();
+    const newPosition: IPosition = {
+      name: this.form.value.name,
+      cost: this.form.value.cost,
+      category: this.categoryId,
+      _id: position._id
+    };
+    if (this.positionId) {
+      this.positionsService
+        .updatePosition(newPosition)
+        .pipe(take(1))
+        .subscribe(
+          (positions: IPosition[]) => {
+            this.positions = positions;
+            MaterialService.toast('Success Update =D');
+          },
+          (error) => {
+            console.error(error);
+            MaterialService.toast(error.error.message);
+          },
+          () => {
+            this.modal.close();
+            this.form.enable();
+            this.form.reset({ name: '', cost: 1 });
+            this.isLoading = false;
+          }
+        );
     }
   }
 }
-// TODO: 10 10:23
+
+
