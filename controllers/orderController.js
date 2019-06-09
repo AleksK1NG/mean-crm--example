@@ -45,10 +45,12 @@ module.exports.getAllOrders = async (req, res) => {
 module.exports.createOrder = async (req, res) => {
   const user = req.user;
   const { list } = req.body;
+  console.log('Console LOG from CEATE Order => ', list);
+
   try {
     const lastOrder = Order.findOne({ user: user._id }).sort({ date: -1 });
-    const maxOrder = lastOrder ? lastOrder.order : 0;
-
+    const maxOrder = lastOrder.order ? lastOrder.order : 0;
+    console.log('Console CEATE Order lastOrder => ', lastOrder.order);
     const order = new Order({
       user: user._id,
       list,

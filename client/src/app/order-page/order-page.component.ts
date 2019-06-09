@@ -3,7 +3,9 @@ import { NavigationEnd, Router } from '@angular/router';
 import { MaterialService } from '../shared/services/material.service';
 import { MaterialInstance } from '../shared/interfaces/materialInstance';
 import { OrderService } from '../shared/services/order.service';
-import { OrderPosition } from '../shared/interfaces/order';
+import { Order, OrderPosition } from '../shared/interfaces/order';
+import { OrdersapiService } from '../shared/services/ordersapi.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-order-page',
@@ -14,8 +16,10 @@ export class OrderPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private isRoot: boolean;
   @ViewChild('modal', null) modalRef: ElementRef;
   public modal: MaterialInstance;
+  public loading = false;
+  private orderSub$;
 
-  constructor(private router: Router, private orderService: OrderService) {}
+  constructor(private router: Router, private orderService: OrderService, private ordersapiService: OrdersapiService) {}
 
   ngOnInit() {
     this.isRoot = this.router.url === '/order';
@@ -32,6 +36,9 @@ export class OrderPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.modal.destroy();
+    if (this.orderSub$) {
+      this.orderSub$.unsubscribe();
+    }
   }
 
   open() {
@@ -43,10 +50,32 @@ export class OrderPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   submit() {
+    this.loading = true;
     this.modal.close();
+
+    const order: Order = {
+      list: this.orderService.orderList.map((item) => {
+        delete item._id;
+        return item;
+      })
+    };
+    this.orderSub$ = this.ordersapiService.createOrder(order).subscribe(
+      (newOrder) => {
+        MaterialService.toast(`Order # ${newOrder.order} created `);
+        this.orderService.clearOrder();
+      },
+      (error) => {
+        console.error(error);
+        MaterialService.toast(error.error.message);
+      },
+      () => {
+        this.modal.close();
+        this.loading = false;
+      }
+    );
   }
 
   deletePosition(orderPosition: OrderPosition) {
-    this.orderService.deleteOrder(orderPosition)
+    this.orderService.deleteOrder(orderPosition);
   }
 }

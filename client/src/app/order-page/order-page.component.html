@@ -44,7 +44,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button (click)="cancel()" class="modal-action waves-effect waves-black btn-flat">Cancel</button>
-    <button (click)="submit()" class="modal-action btn waves-effect" [disabled]="orderService.orderList.length === 0">Submit</button>
+    <button (click)="cancel()" class="modal-action waves-effect waves-black btn-flat" [disabled]="loading">Cancel</button>
+    <button (click)="submit()" class="modal-action btn waves-effect" [disabled]="orderService.orderList.length === 0 || loading">Submit</button>
   </div>
 </div>
