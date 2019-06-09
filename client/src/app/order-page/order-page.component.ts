@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { MaterialService } from '../shared/services/material.service';
 import { MaterialInstance } from '../shared/interfaces/materialInstance';
 import { OrderService } from '../shared/services/order.service';
+import { OrderPosition } from '../shared/interfaces/order';
 
 @Component({
   selector: 'app-order-page',
@@ -43,5 +44,9 @@ export class OrderPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   submit() {
     this.modal.close();
+  }
+
+  deletePosition(orderPosition: OrderPosition) {
+    this.orderService.deleteOrder(orderPosition)
   }
 }

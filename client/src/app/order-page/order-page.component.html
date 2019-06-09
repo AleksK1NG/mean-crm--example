@@ -6,18 +6,16 @@
     Create
   </h4>
 
-  <button class="waves-effect btn grey darken-1" (click)="open()">
+  <button class="waves-effect btn grey darken-1" (click)="open()" [disabled]="orderService.orderList.length === 0">
     Complete
   </button>
 </div>
-
-
 
 <router-outlet></router-outlet>
 <!--<app-order-categories></app-order-categories>-->
 
 <!--Modal-->
-<div id="explore-order" class="modal modal-fixed-footer" #modal >
+<div id="explore-order" class="modal modal-fixed-footer" #modal>
   <div class="modal-content">
     <h4 class="mb1">Your Order:</h4>
     <table class="highlight">
@@ -31,32 +29,22 @@
       </thead>
 
       <tbody>
-        <tr>
-          <td>Alvin</td>
-          <td>3</td>
-          <td>$0.87</td>
-          <td><i class="material-icons pointer">delete</i></td>
-        </tr>
-        <tr>
-          <td>Alan</td>
-          <td>1</td>
-          <td>$3.76</td>
-          <td><i class="material-icons pointer">delete</i></td>
-        </tr>
-        <tr>
-          <td>Jonathan</td>
-          <td>2</td>
-          <td>$7.00</td>
-          <td><i class="material-icons pointer">delete</i></td>
+        <tr *ngFor="let item of orderService.orderList">
+          <td>{{ item.name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.cost }}</td>
+          <td><i class="material-icons pointer" (click)="deletePosition(item)">delete</i></td>
         </tr>
       </tbody>
     </table>
     <div class="order-summary">
-      <p>Total price <strong>22 $</strong></p>
+      <p>
+        Total price <strong>{{ orderService.price }} $</strong>
+      </p>
     </div>
   </div>
   <div class="modal-footer">
-    <button (click)="cancel()"  class="modal-action waves-effect waves-black btn-flat">Cancel</button>
-    <button (click)="submit()" class="modal-action btn waves-effect">Submit</button>
+    <button (click)="cancel()" class="modal-action waves-effect waves-black btn-flat">Cancel</button>
+    <button (click)="submit()" class="modal-action btn waves-effect" [disabled]="orderService.orderList.length === 0">Submit</button>
   </div>
 </div>
