@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { MaterialInstance } from '../shared/interfaces/materialInstance';
 import { MaterialService } from '../shared/services/material.service';
 import { OrdersApiService } from '../shared/services/orders-api.service';
+import { Order } from '../shared/interfaces/order';
 
 @Component({
   selector: 'app-history-page',
@@ -12,10 +13,26 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
   isFilterVisible = false;
   @ViewChild('tooltip', null) tooltipRef: ElementRef;
   tootip: MaterialInstance;
+  offset = 0;
+  limit = 5;
+  ordersSub$;
+  orders: Order[] = [];
 
   constructor(private ordersApiService: OrdersApiService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.fetchOrders();
+  }
+
+  private fetchOrders() {
+    const params = {
+      offset: this.offset,
+      limit: this.limit
+    };
+    this.ordersSub$ = this.ordersApiService.getAllOrders(params).subscribe((orders: Order[]) => {
+      this.orders = orders;
+    });
+  }
 
   ngAfterViewInit() {
     this.tootip = MaterialService.initTooltip(this.tooltipRef);
@@ -23,5 +40,6 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.tootip.destroy();
+    this.ordersSub$.unsubscribe();
   }
 }
