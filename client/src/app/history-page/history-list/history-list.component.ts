@@ -7,11 +7,16 @@ import { Order } from '../../shared/interfaces/order';
   styleUrls: ['./history-list.component.css']
 })
 export class HistoryListComponent implements OnInit {
-  @Input() orders: Order[]
+  @Input() orders: Order[];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  computedPrice(order: Order): number {
+    return order.list.reduce((acc, item) => {
+      acc += item.quantity * item.cost;
+      return acc;
+    }, 0);
   }
-
 }
