@@ -2,7 +2,7 @@
   <h4>Orders history</h4>
   <button
     (click)="isFilterVisible = !isFilterVisible"
-    [ngClass]="{ active: isFilterVisible }"
+    [ngClass]="{ active: isFilterVisible, 'red': isFiltered() }"
     class="btn btn-small"
     data-tooltip="Open filter"
     data-position="left"
