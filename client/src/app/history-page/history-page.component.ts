@@ -4,6 +4,7 @@ import { MaterialService } from '../shared/services/material.service';
 import { OrdersApiService } from '../shared/services/orders-api.service';
 import { Order } from '../shared/interfaces/order';
 
+const STEP = 2;
 @Component({
   selector: 'app-history-page',
   templateUrl: './history-page.component.html',
@@ -14,13 +15,17 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('tooltip', null) tooltipRef: ElementRef;
   tootip: MaterialInstance;
   offset = 0;
-  limit = 5;
+  limit = STEP;
   ordersSub$;
   orders: Order[] = [];
+  loading = false;
+  reloading = false;
+  isAllLoaded = false;
 
   constructor(private ordersApiService: OrdersApiService) {}
 
   ngOnInit() {
+    this.reloading = true;
     this.fetchOrders();
   }
 
@@ -30,7 +35,10 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
       limit: this.limit
     };
     this.ordersSub$ = this.ordersApiService.getAllOrders(params).subscribe((orders: Order[]) => {
-      this.orders = orders;
+      this.orders = this.orders.concat(orders);
+      this.isAllLoaded = orders.length < STEP;
+      this.loading = false;
+      this.reloading = false;
     });
   }
 
@@ -41,5 +49,11 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     this.tootip.destroy();
     this.ordersSub$.unsubscribe();
+  }
+
+  loadMore() {
+    this.offset += STEP;
+    this.loading = true;
+    this.fetchOrders();
   }
 }
