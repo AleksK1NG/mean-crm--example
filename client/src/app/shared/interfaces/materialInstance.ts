@@ -3,3 +3,7 @@ export interface MaterialInstance {
   close?(): void;
   destroy?(): void;
 }
+
+export interface MaterialDatepicker extends MaterialInstance {
+  date?: Date;
+}

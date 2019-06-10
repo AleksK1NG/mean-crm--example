@@ -3,6 +3,7 @@ import { MaterialInstance } from '../shared/interfaces/materialInstance';
 import { MaterialService } from '../shared/services/material.service';
 import { OrdersApiService } from '../shared/services/orders-api.service';
 import { Order } from '../shared/interfaces/order';
+import { Filter } from '../shared/interfaces/filter';
 
 const STEP = 2;
 @Component({
@@ -21,6 +22,7 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
   loading = false;
   reloading = false;
   isAllLoaded = false;
+  filter: Filter = {};
 
   constructor(private ordersApiService: OrdersApiService) {}
 
@@ -30,10 +32,15 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private fetchOrders() {
-    const params = {
+    // const params = {
+    //   offset: this.offset,
+    //   limit: this.limit
+    // };
+    const params = Object.assign({}, this.filter, {
       offset: this.offset,
       limit: this.limit
-    };
+    });
+
     this.ordersSub$ = this.ordersApiService.getAllOrders(params).subscribe((orders: Order[]) => {
       this.orders = this.orders.concat(orders);
       this.isAllLoaded = orders.length < STEP;
@@ -54,6 +61,14 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
   loadMore() {
     this.offset += STEP;
     this.loading = true;
+    this.fetchOrders();
+  }
+
+  applyFilter(filter: Filter) {
+    this.orders = [];
+    this.offset = 0;
+    this.filter = filter;
+    this.reloading = true;
     this.fetchOrders();
   }
 }
