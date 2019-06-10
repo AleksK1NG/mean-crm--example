@@ -4,8 +4,7 @@ import { MaterialService } from '../shared/services/material.service';
 import { MaterialInstance } from '../shared/interfaces/materialInstance';
 import { OrderService } from '../shared/services/order.service';
 import { Order, OrderPosition } from '../shared/interfaces/order';
-import { OrdersapiService } from '../shared/services/ordersapi.service';
-import { Observable } from 'rxjs';
+import { OrdersApiService } from '../shared/services/orders-api.service';
 
 @Component({
   selector: 'app-order-page',
@@ -19,7 +18,7 @@ export class OrderPageComponent implements OnInit, OnDestroy, AfterViewInit {
   public loading = false;
   private orderSub$;
 
-  constructor(private router: Router, private orderService: OrderService, private ordersapiService: OrdersapiService) {}
+  constructor(private router: Router, private orderService: OrderService, private ordersapiService: OrdersApiService) {}
 
   ngOnInit() {
     this.isRoot = this.router.url === '/order';
