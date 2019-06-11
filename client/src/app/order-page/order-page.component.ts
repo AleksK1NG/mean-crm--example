@@ -12,11 +12,11 @@ import { OrdersApiService } from '../shared/services/orders-api.service';
   styleUrls: ['./order-page.component.css']
 })
 export class OrderPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  private isRoot: boolean;
+  isRoot: boolean;
   @ViewChild('modal', null) modalRef: ElementRef;
-  public modal: MaterialInstance;
-  public loading = false;
-  private orderSub$;
+  modal: MaterialInstance;
+  loading = false;
+  orderSub$;
 
   constructor(private router: Router, private orderService: OrderService, private ordersapiService: OrdersApiService) {}
 

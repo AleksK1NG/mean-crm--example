@@ -41,10 +41,6 @@ export class AuthService {
     return this.token;
   }
 
-  getUser(): Object {
-    return this.user;
-  }
-
   isAuthenticated(): Boolean {
     return !!this.token;
   }
@@ -53,7 +49,7 @@ export class AuthService {
     this.setToken(null);
     this.setUser(null);
     localStorage.clear();
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
   }
 
   setUser(user) {

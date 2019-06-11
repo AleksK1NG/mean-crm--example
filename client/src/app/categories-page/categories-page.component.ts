@@ -24,16 +24,6 @@ export class CategoriesPageComponent implements OnInit, OnDestroy {
     this.categoriesService.getAllCategories().subscribe((categories: Category[]) => {
       this.categoriesSub = categories;
     });
-
-    // this.categoriesService.fetchAllCategories().subscribe(
-    //   (categories: Category[]) => {
-    //     this.categoriesService.setCategories(categories);
-    //     console.log('GET categories => ', categories);
-    //   },
-    //   (error) => {
-    //     this.categoriesService.setError(error);
-    //   }
-    // );
   }
 
   ngOnDestroy(): void {

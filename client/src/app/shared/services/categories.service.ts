@@ -10,14 +10,14 @@ import { Router } from '@angular/router';
 export class CategoriesService {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
-  private errorSub$ = new BehaviorSubject<any>(null);
-  private categories: Category[] = [];
-  private currentCategory: Category = null;
+  errorSub$ = new BehaviorSubject<any>(null);
+  categories: Category[] = [];
+  currentCategory: Category = null;
 
-  public isLoading$ = new BehaviorSubject<boolean>(false);
-  private categoriesSub$ = new Subject<Category[]>();
-  private categoriesList$ = new BehaviorSubject<Category[]>(this.categories);
-  private currentCategorySub$ = new BehaviorSubject<Category>(this.currentCategory);
+  isLoading$ = new BehaviorSubject<boolean>(false);
+  categoriesSub$ = new Subject<Category[]>();
+  categoriesList$ = new BehaviorSubject<Category[]>(this.categories);
+  currentCategorySub$ = new BehaviorSubject<Category>(this.currentCategory);
 
   getAllCategories(): Subject<Category[]> {
     // const categoriesSub$ = new Subject<Category[]>();
@@ -29,8 +29,6 @@ export class CategoriesService {
         this.categoriesSub$.next(categories);
         this.errorSub$.next(null);
         this.isLoading$.next(false);
-        console.log('fetch categories => ', categories)
-
       },
       (error) => {
         this.errorSub$.next(error);
@@ -38,7 +36,6 @@ export class CategoriesService {
       }
     );
 
-    // return this.categoriesSub$;
     return this.categoriesList$;
   }
 
@@ -60,32 +57,6 @@ export class CategoriesService {
     return this.currentCategorySub$;
   }
 
-  // addCategory(name: string, image?: File): BehaviorSubject<Category[]> {
-  //   this.isLoading$.next(true);
-  //   const fd = new FormData()
-  //   if (image) {
-  //     fd.append('image', image, image.name)
-  //   }
-  //   fd.append('name', name)
-  //   debugger
-  //   this.httpClient.post<Category>('/api/v1/category', fd).subscribe(
-  //     (category: Category) => {
-  //       this.categories.push(category);
-  //       this.categoriesList$.next(this.categories);
-  //       this.errorSub$.next(null);
-  //       this.isLoading$.next(false);
-  //       this.router.navigate(['/categories'])
-  //     },
-  //     (error) => {
-  //       this.errorSub$.next(error);
-  //       this.isLoading$.next(false);
-  //     }
-  //   );
-  //
-  //   // return this.categoriesSub$;
-  //   return this.categoriesList$;
-  // }
-
   addCategory(newCategory: Category): BehaviorSubject<Category[]> {
     this.isLoading$.next(true);
     this.httpClient.post<Category>('/api/v1/category', newCategory).subscribe(
@@ -102,7 +73,6 @@ export class CategoriesService {
       }
     );
 
-    // return this.categoriesSub$;
     return this.categoriesList$;
   }
 
@@ -110,9 +80,7 @@ export class CategoriesService {
     this.isLoading$.next(true);
     this.httpClient.patch<Category>(`/api/v1/category/${newCategory._id}`, newCategory).subscribe(
       (updatedCategory: Category) => {
-        this.categories = this.categories.map((cat: Category) =>
-          cat._id === updatedCategory._id ? updatedCategory : cat
-        );
+        this.categories = this.categories.map((cat: Category) => (cat._id === updatedCategory._id ? updatedCategory : cat));
 
         this.categoriesList$.next(this.categories);
         this.errorSub$.next(null);
@@ -125,7 +93,6 @@ export class CategoriesService {
       }
     );
 
-    // return this.categoriesSub$;
     return this.categoriesList$;
   }
 
@@ -146,8 +113,6 @@ export class CategoriesService {
       }
     );
 
-    // return this.categoriesSub$;
     return this.categoriesList$;
   }
 }
-

@@ -8,11 +8,11 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class PositionsService {
-  private errorSub$ = new BehaviorSubject<any>(null);
-  private positions: IPosition[] = [];
-  public positionsList$ = new BehaviorSubject<IPosition[]>(this.positions);
-  public positionsListObs$ = this.positionsList$.asObservable();
-  public isLoading$ = new BehaviorSubject<boolean>(false);
+  errorSub$ = new BehaviorSubject<any>(null);
+  positions: IPosition[] = [];
+  positionsList$ = new BehaviorSubject<IPosition[]>(this.positions);
+  positionsListObs$ = this.positionsList$.asObservable();
+  isLoading$ = new BehaviorSubject<boolean>(false);
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
@@ -32,7 +32,7 @@ export class PositionsService {
     );
 
     // return this.positionsList$;
-    return this.positionsListObs$
+    return this.positionsListObs$;
   }
 
   addPosition(position: IPosition): Observable<IPosition[]> {
@@ -50,7 +50,7 @@ export class PositionsService {
       }
     );
 
-    return this.positionsListObs$
+    return this.positionsListObs$;
   }
 
   updatePosition(position: IPosition): Observable<IPosition[]> {
@@ -70,7 +70,7 @@ export class PositionsService {
       }
     );
 
-    return this.positionsListObs$
+    return this.positionsListObs$;
   }
 
   deletePosition(position: IPosition): Observable<IPosition[]> {
@@ -91,6 +91,6 @@ export class PositionsService {
       }
     );
 
-    return this.positionsListObs$
+    return this.positionsListObs$;
   }
 }

@@ -8,12 +8,10 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class OrderService {
-  public orderList: OrderPosition[] = [];
-  public price = 0;
+  orderList: OrderPosition[] = [];
+  price = 0;
 
   constructor(private httpClient: HttpClient) {}
-
-
 
   createOrder(position: IPosition) {
     const orderPosition: OrderPosition = Object.assign(

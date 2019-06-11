@@ -25,7 +25,6 @@ export class SiteLayoutComponent implements OnInit, AfterViewInit {
   logout(event: Event) {
     event.preventDefault();
     this.authService.logout();
-    console.log('Logout');
   }
 
   ngAfterViewInit(): void {

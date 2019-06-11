@@ -32,10 +32,6 @@ export class HistoryPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private fetchOrders() {
-    // const params = {
-    //   offset: this.offset,
-    //   limit: this.limit
-    // };
     const params = Object.assign({}, this.filter, {
       offset: this.offset,
       limit: this.limit

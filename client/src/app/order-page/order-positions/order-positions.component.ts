@@ -13,7 +13,7 @@ import { MaterialService } from '../../shared/services/material.service';
   styleUrls: ['./order-positions.component.css']
 })
 export class OrderPositionsComponent implements OnInit {
-  private positions$: Observable<IPosition[]>;
+  positions$: Observable<IPosition[]>;
 
   constructor(private route: ActivatedRoute, private positionsService: PositionsService, private orderService: OrderService) {}
 
@@ -32,7 +32,6 @@ export class OrderPositionsComponent implements OnInit {
   }
 
   addToORder(position: IPosition) {
-    console.log('ADD Oerder Position -> ', position);
     MaterialService.toast(`Added x${position.quantity}`);
     this.orderService.createOrder(position);
   }
