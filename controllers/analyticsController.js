@@ -8,7 +8,7 @@ module.exports.overview = async (req, res) => {
   const user = req.user;
 
   try {
-    const allOrders = await Order.find({ user: user._id }).sort(1);
+    const allOrders = await Order.find({ user: user._id }).sort({ date: 1 });
     const ordersMap = getOrdersMap(allOrders);
     const yesterdayOrders =
       ordersMap[
