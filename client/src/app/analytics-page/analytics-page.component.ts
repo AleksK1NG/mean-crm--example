@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { AnalyticsService } from '../shared/services/analytics.service';
 import { AnalyticsPage } from '../shared/interfaces/analyticsPage';
 import { Subscription } from 'rxjs';
+import { Chart } from 'chart.js';
+import { createChartConfig } from '../utils/chartjs';
 
 @Component({
   selector: 'app-analytics-page',
@@ -20,9 +22,22 @@ export class AnalyticsPageComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit() {}
 
   ngAfterViewInit() {
+    const gainConfig: any = {
+      label: 'Gain',
+      color: 'rgb(255, 99, 132)'
+    };
+
     this.averageSub$ = this.analyticsService.getAnalytics().subscribe((data: AnalyticsPage) => {
       this.average = data.average;
       console.log(data);
+      gainConfig.labels = data.chart.map((item) => item.label);
+      gainConfig.data = data.chart.map((item) => item.gain);
+
+      const gainCtx = this.gainRef.nativeElement.getContext('2d');
+      gainCtx.canvas.height = '300px';
+
+      new Chart(gainCtx, createChartConfig(gainConfig));
+
       this.loading = false;
     });
   }
